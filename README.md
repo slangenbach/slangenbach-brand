@@ -18,7 +18,7 @@ In the root of a Quarto project (Quarto 1.8 or later):
 quarto add slangenbach/slangenbach-brand
 ```
 
-This installs the extension into `_extensions/slangenbach/`. Check that
+This installs the extension into `_extensions/slangenbach/slangenbach/`. Check that
 directory into version control. Every document in the project, including
 HTML pages and reveal.js presentations, then uses the brand. The
 extension's brand takes precedence over a `_brand.yml` in the project.
