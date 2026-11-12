@@ -1,0 +1,27 @@
+---
+title: Stefan Langenbach brand example
+format:
+  html: default
+  revealjs:
+    output-file: example-slides.html
+---
+
+## Typography
+
+Body text and headings are set in Source Serif Pro, with *italic* and
+**bold** variants. Here is [a link](https://stefan.langenbach.online)
+and some inline code: `quarto add slangenbach/slangenbach-brand`.
+
+```python
+def greet(name: str) -> str:
+    return f"Hello, {name}!"
+```
+
+## Colours
+
+[paper]{style="color: var(--brand-paper); background: var(--brand-ink)"} ·
+[ink]{style="color: var(--brand-ink)"} ·
+[ink-muted]{style="color: var(--brand-ink-muted)"} ·
+[rule]{style="color: var(--brand-rule)"} ·
+[accent]{style="color: var(--brand-accent)"} ·
+[code-paper]{style="background: var(--brand-code-paper)"}
