@@ -44,7 +44,8 @@ for page in example example-slides; do
       fail "$page does not load $family from Bunny Fonts"
     fi
   done
-  if grep -Eq 'fonts\.googleapis|fonts\.gstatic' "${page}.html" <<<"$css"; then
+  if grep -Eq 'fonts\.googleapis|fonts\.gstatic' "${page}.html" ||
+     grep -Eq 'fonts\.googleapis|fonts\.gstatic' <<<"$css"; then
     fail "$page references Google Fonts"
   else
     pass "$page does not reference Google Fonts"
@@ -64,17 +65,22 @@ expect_css() {
 # HTML page, light mode.
 expect_css example "body font is Source Serif Pro"   '--bs-body-font-family:[[:space:]]*"?Source Serif Pro'
 expect_css example "headings use Source Serif Pro"   'h1,[^{]*\{[^}]*font-family:[[:space:]]*"?Source Serif Pro'
+expect_css example "headings are weight 600"         'h1,[^{]*\{[^}]*font-weight:[[:space:]]*600'
 expect_css example "code font is JetBrains Mono"     '--bs-font-monospace:[[:space:]]*"?JetBrains Mono'
 expect_css example "background is paper"            '--bs-body-bg:[[:space:]]*#faf8f3'
 expect_css example "text is ink"                    '--bs-body-color:[[:space:]]*#1f2328'
 expect_css example "links are accent"               '--bs-link-color:[[:space:]]*#a3421c'
 expect_css example "muted text is ink-muted"        '--bs-secondary:[[:space:]]*#6b665f'
+expect_css example "hairlines are rule"             '--bs-tertiary-color:[[:space:]]*#e4dfd5'
 expect_css example "code background is code-paper"  'background-color:[[:space:]]*#f1ede4'
 
 # HTML page, dark mode.
 expect_css example "dark background is paper-dark"  '--bs-body-bg:[[:space:]]*#17181b'
 expect_css example "dark text is ink-dark"          '--bs-body-color:[[:space:]]*#e7e3da'
 expect_css example "dark links are accent-dark"     '--bs-link-color:[[:space:]]*#e8895c'
+expect_css example "dark muted text is ink-muted-dark" '--bs-secondary:[[:space:]]*#9b968c'
+expect_css example "dark hairlines are rule-dark"   '--bs-tertiary-color:[[:space:]]*#2c2d31'
+expect_css example "dark code background is code-paper-dark" 'background-color:[[:space:]]*#202125'
 
 # reveal.js presentation: light values only.
 expect_css example-slides "body font is Source Serif Pro"  '--r-main-font:[[:space:]]*"?Source Serif Pro'
@@ -83,6 +89,20 @@ expect_css example-slides "code font is JetBrains Mono"    '--r-code-font:[[:spa
 expect_css example-slides "background is paper"           '--r-background-color:[[:space:]]*#faf8f3'
 expect_css example-slides "text is ink"                   '--r-main-color:[[:space:]]*#1f2328'
 expect_css example-slides "links are accent"              '--r-link-color:[[:space:]]*#a3421c'
+expect_css example-slides "headings are weight 600"       '--r-heading-font-weight:[[:space:]]*600'
+expect_css example-slides "code background is code-paper" 'code-bg:[[:space:]]*#f1ede4'
+
+# In a real browser, the fonts load and apply (no fallback to system fonts).
+# Needs uv; the first run downloads Playwright's Chromium.
+if command -v uv >/dev/null; then
+  if uv run --quiet --with playwright python tests/fonts_render.py; then
+    pass "fonts render in the browser"
+  else
+    fail "fonts render in the browser"
+  fi
+else
+  echo "skip: fonts render in the browser (uv not installed)"
+fi
 
 echo
 if [[ $failures -eq 0 ]]; then

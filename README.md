@@ -92,7 +92,10 @@ quarto preview example.qmd
 ```
 
 [`tests/acceptance.sh`](tests/acceptance.sh) renders the example and checks
-that both outputs carry the brand's fonts and colours:
+that both outputs carry the brand's fonts and colours. It then opens both
+in a headless browser to check that the fonts actually load, which needs
+[uv](https://docs.astral.sh/uv/); the first run downloads Playwright's
+Chromium:
 
 ```bash
 tests/acceptance.sh
